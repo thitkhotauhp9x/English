@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "python-template"
+version = "0.1.0"
+description = ""
+authors = ["manhdt <thitkhotau.no1@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.10.0,<=3.12.3"
+pydantic = "^2.7.1"
+hypothesis = "^6.100.1"
+selenium = "^4.20.0"
+pandas = "^2.2.2"
+undetected-chromedriver = "^3.5.5"
+fake-useragent = "^1.5.1"
+setuptools = "^69.5.1"
+requests = "^2.31.0"
+beautifulsoup4 = "^4.12.3"
+fastapi = "^0.110.2"
+uvicorn = "^0.29.0"
+jinja2 = "^3.1.3"
+black = "^24.4.2"
+pytest = "^8.2.0"
+anki = "^24.4.1"
+aqt = "^24.4.1"
+icecream = "^2.1.3"
+mypy = "^1.10.0"
+openpyxl = "^3.1.2"
+
+[tool.pyright]
+# https://github.com/microsoft/pyright/blob/main/docs/configuration.md
+useLibraryCodeForTypes = true
+exclude = [".cache"]
+
+[tool.ruff]
+# https://beta.ruff.rs/docs/configuration/
+select = ['E', 'W', 'F', 'I', 'B', 'C4', 'ARG', 'SIM']
+ignore = ['W291', 'W292', 'W293']
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
