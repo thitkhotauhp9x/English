@@ -10,14 +10,21 @@ repos:
   rev: v3.1.0
   hooks:
     - id: pylint
+      args: [
+        "--disable", "missing-module-docstring,missing-function-docstring,missing-class-docstring"
+      ]
       language_version: python
+      additional_dependencies:
+        - requests
 
 - repo: https://github.com/pre-commit/mirrors-mypy
   rev: v1.9.0
   hooks:
     - id: mypy
-      args: []
+      args: ["--install-types"]
       language_version: python
+      additional_dependencies:
+        - types-requests
 
 - repo: https://github.com/codespell-project/codespell
   rev: v2.2.6

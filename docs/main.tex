@@ -1,5 +1,7 @@
 \documentclass[a4paper]{article}
-
+\usepackage{tipa}
+\usepackage[utf8]{vietnam}
+\usepackage{listings}
 \begin{document}
 
 \title{English}
@@ -7,5 +9,61 @@
 \maketitle
 
 \section{Pronunciation a}
+\subsection{Ký hiệu}
 
+\begin{lstlisting}
+(?(DEFINE)
+    (?<consonant>[^ueoai])
+    (?<vowel>[ueoai])
+    (?<cnr>[^ueoair])
+)
+
+a(?&consonant)e
+\end{lstlisting}
+
+\subsection{Một vần}
+\begin{itemize}
+    \item \textipa{eI}  - a(?\&cnr)e        - babe, pace, made, cage, cake, male, name, lane, cape, cáe, date, cave, gaze
+    \item \textipa{eI}  - ai(?\&cnr)        - mail, plain, rain, train
+    \item \textipa{eI}  - ay                - bay, day, gray, pay, play, say, tray
+    \item \textipa{A:}  - ar                - art, bar, car, card, park
+    \item \textipa{A:}  - yar               - yard, yarn
+    \item \textipa{A:}  - a                 - calm, palm
+    \item \textipa{\ae} - a(?\&cnr)\{2\}    - ant, band, bang, bank, grass  
+    \item \textipa{O:}  - al                - talk, walk, all, ball, call, mall, small, tall
+    \item \textipa{O:}  - aw                - claw, draw, flaw, jaw, law, paw, raw
+    \item \textipa{O:}  - yaw               - yaw, yawl, yawn
+    \item \textipa{O:}  - au                - cause, sauce
+    \item \textipa{O:}  - wa                - want, wash
+    \item \textipa{O:}  - war               - war, ward, warm, warn
+    \item \textipa{er}  - are               - bare, care, dare, square
+    \item \textipa{er}  - air               - air, chair, pair
+    \item \textipa{er}  - ware              - ware
+\end{itemize}
+
+
+\subsection{Nhiều vần}
+\begin{tabular}{|l|lll|}
+    \hline
+        strong & \textipa{a:, aI} & \\
+               & \textipa{O:} & ball \\
+               & \textipa{ae} & cat, bag, bat \\
+               & \textipa{3:} & \\
+               & \textipa{e}  & any, many \\
+               & \textipa{eI} & a(?\&cnr)e    & operate                 \\
+               &              & ai(?\&cnr)    & mail                    \\
+               &              & ay            & bay                     \\
+               &              & able, aple    & able, staple            \\
+               &              & (?\&cnr)ation & station                 \\
+               & \textipa{A:} & ar            & art, bar                \\
+               &              & a             & father, calm, palm      \\
+               &              & rage          & barrage, garage, mirage \\
+               & \textipa{\ae} & \\
+    \hline
+        mean   &  \textipa{eI}& n\textbf{ame} \\ 
+    \hline
+        weak   & \textipa{I}  & \\
+               & \textipa{@}  & \\
+    \hline
+\end{tabular}
 \end{document}
