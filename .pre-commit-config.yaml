@@ -30,6 +30,7 @@ repos:
         - types-requests
         - types-beautifulsoup4
         - PyPDF2
+        - icecream
 
 - repo: https://github.com/codespell-project/codespell
   rev: v2.2.6
