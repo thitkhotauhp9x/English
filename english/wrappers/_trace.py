@@ -3,7 +3,7 @@ from functools import wraps
 from pathlib import PosixPath
 from typing import Callable, ParamSpec, TypeVar
 
-from src.wrappers._logging import getLogger
+from english.wrappers._logging import getLogger
 
 logger = getLogger(__name__)
 

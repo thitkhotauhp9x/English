@@ -2,7 +2,7 @@ import os.path
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
-from src.wrappers import trace
+from english.wrappers import trace
 
 
 @trace()

@@ -1,5 +1,5 @@
-from src.utilities import OxfordLearnerDictionaries, RhymeZone
-from src.wrappers import logging
+from english.utilities import OxfordLearnerDictionaries, RhymeZone
+from english.wrappers import logging
 
 logger = logging.getLogger(__name__)
 
