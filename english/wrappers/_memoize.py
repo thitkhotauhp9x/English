@@ -1,9 +1,11 @@
 import inspect
 import logging
 from functools import wraps
-from pathlib import PosixPath
-from typing import Callable, ParamSpec, TypeVar, Any, Dict
+from pathlib import PosixPath, Path
+from typing import Callable, ParamSpec, TypeVar, Any, Dict, List, Tuple
 
+
+logger = logging.getLogger(__name__)
 __all__ = ["memoize"]
 
 P = ParamSpec("P")
@@ -53,3 +55,14 @@ def memoize(func: Callable[P, R]) -> Callable[P, R]:
         return cache[key]
 
     return wrapper
+
+
+def make_path(data: bytes, path: Path):
+    if path.exists():
+        logger.warning("The path(%s) was exists", path.as_posix())
+    path.write_bytes(data)
+
+
+def make_paths(data_list: List[Tuple[bytes, Path]]):
+    for data, path in data_list:
+        make_path(data, path)
