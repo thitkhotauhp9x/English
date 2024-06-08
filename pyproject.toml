@@ -29,6 +29,8 @@ pre-commit = "^3.7.1"
 pypdf2 = "^3.0.1"
 pysat = "^3.2.0"
 sympy = "^1.12.1"
+tqdm = "^4.66.4"
+types-tqdm = "^4.66.0.20240417"
 
 [tool.pyright]
 # https://github.com/microsoft/pyright/blob/main/docs/configuration.md
