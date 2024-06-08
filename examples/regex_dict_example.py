@@ -3,7 +3,7 @@ from pathlib import Path
 
 from tqdm import tqdm
 
-from english.utilities import RegexDict, OxfordLearnerDictionaries
+from english.utilities import RegexDict, OxfordLearnerDictionaries, count_syllables
 
 
 def main():
@@ -21,7 +21,11 @@ def main():
         for word, phonetic in pickle.load(f):
             if phonetic is None:
                 continue
-            print(word, phonetic)
+            total = count_syllables(phonetic)
+            if total == 1:
+                print(word, phonetic)
+            else:
+                ...
 
 
 if __name__ == "__main__":
