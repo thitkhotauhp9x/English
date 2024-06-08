@@ -18,8 +18,10 @@ def main():
             pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
 
     with open(path.as_posix(), "rb") as f:
-        data = pickle.load(f)
-        print(data)
+        for word, phonetic in pickle.load(f):
+            if phonetic is None:
+                continue
+            print(word, phonetic)
 
 
 if __name__ == "__main__":
