@@ -9,7 +9,7 @@ from english.utilities import RegexDict, OxfordLearnerDictionaries, count_syllab
 
 
 def filter_(word: str, num: int) -> Generator[Tuple[str, str], None, None]:
-    path = Path("data.pickle")
+    path = Path(f"{word}.pickle")
     if not path.exists():
         data = []
         for word_ in tqdm(list(RegexDict(word).find())):
@@ -30,8 +30,7 @@ def filter_(word: str, num: int) -> Generator[Tuple[str, str], None, None]:
                 ...
 
 
-def main():
-    word: str = "ear"
+def make_report(word: str) -> None:
     data: List[Tuple[str, str]] = list(filter_(word, 1))
 
     def _find_vowel(t: Tuple[str, str]) -> str:
@@ -42,6 +41,10 @@ def main():
             writer.write(f"## {key}\n")
             for w, p in group:
                 writer.write(f"* {w} {p}\n")
+
+
+def main():
+    make_report(word="ee")
 
 
 if __name__ == "__main__":
