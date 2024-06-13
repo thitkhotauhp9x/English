@@ -1,68 +1,125 @@
+import hashlib
 import inspect
 import logging
+import pickle
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from functools import wraps
-from pathlib import PosixPath, Path
-from typing import Callable, ParamSpec, TypeVar, Any, Dict, List, Tuple
-
+from pathlib import Path
+from typing import Callable, ParamSpec, TypeVar, Any, get_args, Tuple
 
 logger = logging.getLogger(__name__)
-__all__ = ["memoize"]
+
+__all__ = ["memoize", "Cache", "CachePath", "SkipCache"]
 
 P = ParamSpec("P")
 R = TypeVar("R")
 
 
-def make_key(args, kwargs):
-    key = args
-
-    if kwargs:
-        key += (object(),)
-        for item in kwargs.items():
-            key += item
-
-    return hash(key)
+@dataclass
+class Cache(ABC):
+    @abstractmethod
+    def key(self, value: Any) -> bytes:
+        raise NotImplementedError()
 
 
-def get_kwargs(func, args, kwargs):
+@dataclass
+class CachePath(Cache):
+    def key(self, value: Path) -> bytes:
+        return value.read_bytes()
+
+
+@dataclass
+class SkipCache(Cache):
+    def key(self, value: Any) -> bytes:
+        return pickle.dumps((object(), "skip"))
+
+
+class CacheError(Exception):
+    ...
+
+
+class CacheDecodeError(CacheError):
+    ...
+
+
+class CacheEncodeError(CacheError):
+    ...
+
+
+class CacheKeyError(CacheError):
+    ...
+
+
+def _get_kwargs(func, args, kwargs):
     params = inspect.signature(func).parameters
     kwargs_ = dict(zip(params, args))
     kwargs_.update(kwargs)
     return kwargs_
 
 
-def memoize(func: Callable[P, R]) -> Callable[P, R]:
-    cache = {}
+def _make_key(func, args, kwargs) -> str:
+    key: Tuple = (inspect.getsource(func),)
+    key += tuple(args)
+    if kwargs:
+        key += (object(),)
+        for item in kwargs.items():
+            key += item
 
-    @wraps(func)
-    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
-        kwargs_: Dict[Any, Any] = {}
-        for key, value in get_kwargs(func, args, kwargs).items():
-            if isinstance(value, PosixPath):
-                if value.is_file():
-                    content = value.read_bytes()
-                    kwargs_[key] = content
-                elif value.is_dir():
-                    logging.warning("Does not support to cache a dir.")
-                    kwargs_[key] = value
-                else:
-                    raise NotImplementedError()
-            else:
-                kwargs_[key] = value
-
-        key = make_key((), kwargs_)
-        if key not in cache:
-            cache[key] = func(*args, **kwargs)
-        return cache[key]
-
-    return wrapper
+    return hashlib.sha256(pickle.dumps(key)).hexdigest()
 
 
-def make_path(data: bytes, path: Path):
-    if path.exists():
-        logger.warning("The path(%s) was exists", path.as_posix())
-    path.write_bytes(data)
+def make_key(func, args, kwargs) -> str:
+    try:
+        kwargs_ = _get_kwargs(func, args, kwargs)
+
+        signature = inspect.signature(func)
+        params = signature.parameters
+
+        for param_name, param_type in params.items():
+            annotation = param_type.annotation
+
+            for arg in get_args(annotation):
+                try:
+                    value = kwargs_[param_name]
+                    if isinstance(arg, Cache):
+                        kwargs_[param_name] = arg.key(value)
+                except KeyError as error:
+                    logger.exception(error)
+                    continue
+
+        key = _make_key(func, (), kwargs_)
+        return key
+    except Exception as error:
+        raise CacheKeyError() from error
 
 
-def make_paths(data_list: List[Tuple[bytes, Path]]):
-    for data, path in data_list:
-        make_path(data, path)
+def memoize(
+    encode: Callable[[R], bytes] = pickle.dumps,
+    decode: Callable[[bytes], R] = pickle.loads,
+) -> Callable[[Callable[P, R]], Callable[P, R]]:
+    def decorator(func: Callable[P, R]) -> Callable[P, R]:
+        cache = {}
+
+        @wraps(func)
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+            try:
+                key = make_key(func, args, kwargs)
+                if key not in cache:
+                    result = func(*args, **kwargs)
+                    try:
+                        cache[key] = encode(result)
+                    except Exception as error:
+                        raise CacheEncodeError() from error
+                try:
+                    return decode(cache[key])
+                except Exception as error:
+                    del cache[key]
+                    raise CacheDecodeError() from error
+            except CacheError as error:
+                logger.exception(error)
+                return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator

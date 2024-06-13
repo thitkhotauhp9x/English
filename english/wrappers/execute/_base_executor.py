@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from shlex import quote, join
 from subprocess import Popen, PIPE
 from typing import List
@@ -11,7 +11,6 @@ class BaseExecutor(ABC):
     def command(self) -> str:
         return join([quote(arg) for arg in self.args])
 
-    @abstractmethod
     @property
     def args(self) -> List[str]:
         raise NotImplementedError()
