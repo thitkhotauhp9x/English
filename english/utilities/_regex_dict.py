@@ -1,10 +1,23 @@
 import re
 from abc import ABC
 from dataclasses import dataclass, field
+from functools import lru_cache
 from typing import Mapping, Any, Generator
 
 from bs4 import BeautifulSoup
-from requests import post
+from requests import post, Response
+
+
+@lru_cache(maxsize=None)
+def get_words(url: str, regex: str) -> Response:
+    data = {
+        "str": regex,
+        "ifun": "if",
+        "ccg": "all",
+        "search": "Search",
+    }
+    response = post(url=url, data=data, timeout=None, headers={"User-Agent": "Mozilla/5.0"})
+    return response
 
 
 @dataclass
@@ -24,7 +37,7 @@ class RegexDict(ABC):
         }
 
     def find(self) -> Generator[str, None, None]:
-        response = post(url=self.url, data=self.data, timeout=self.timeout, headers=self.headers)
+        response = get_words(self.url, self.regex)
         if response.status_code == 200:
             soup = BeautifulSoup(response.content, "html.parser")
             for a in soup.find_all("a"):

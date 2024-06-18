@@ -1,8 +1,16 @@
 from dataclasses import dataclass
+from functools import lru_cache
 from typing import Optional
 
 from bs4 import BeautifulSoup
-from requests import get
+from requests import get, Response
+
+
+@lru_cache(maxsize=None)
+def get_definition(word: str, timeout: int | None) -> Response:
+    url = f"https://www.oxfordlearnersdictionaries.com/definition/english/{word}"
+    response = get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=timeout)
+    return response
 
 
 @dataclass
@@ -10,8 +18,7 @@ class OxfordLearnerDictionaries:
     word: str
 
     def phonetic_br(self, timeout: Optional[int] = None):
-        url = f"https://www.oxfordlearnersdictionaries.com/definition/english/{self.word}"
-        response = get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=timeout)
+        response = get_definition(self.word, timeout)
         soup = BeautifulSoup(response.text, "html.parser")
 
         container = soup.find("div", class_="top-container")

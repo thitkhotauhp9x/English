@@ -38,13 +38,16 @@ def make_report(word: str) -> None:
 
     with open(f"{word}.md", "w", encoding="utf-8") as writer:
         for key, group in groupby(sorted(data, key=_find_vowel), key=_find_vowel):
-            writer.write(f"## {key}\n")
+            group = list(group)
+            percent = round(len(group) * 100 / len(data))
+            writer.write(f"## {key} ({percent}%)\n")
             for w, p in group:
-                writer.write(f"* {w} {p}\n")
+                writer.write(f"{w} {p}, ")
+            writer.write("\n")
 
 
 def main():
-    make_report(word="ee")
+    make_report(word="ear")
 
 
 if __name__ == "__main__":

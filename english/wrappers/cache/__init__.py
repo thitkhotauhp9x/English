@@ -1,4 +1,6 @@
-from english.wrappers.cache import _path as path
-from english.wrappers.cache._cached_path import CachedPath
+from english.wrappers.cache import errors
+from english.wrappers.cache._memoize import memoize
+from english.wrappers.cache._memoize_method import memoize_method
+from english.wrappers.cache.annotations import Cache, SkipCache, PathCache
 
-__all__ = ["path", "CachedPath"]
+__all__ = ["Cache", "SkipCache", "PathCache", "errors", "memoize", "memoize_method"]
