@@ -1,10 +1,10 @@
+import hashlib
+import inspect
 import logging
 import pickle
+import shelve
 from functools import wraps
 from typing import Callable, ParamSpec, TypeVar
-
-from english.wrappers.cache.errors import CacheEncodeError, CacheDecodeError, CacheError, CacheKeyError
-from english.wrappers.cache.key_makers import TypeHintKeyMaker
 
 logger = logging.getLogger(__name__)
 
@@ -13,38 +13,24 @@ R = TypeVar("R")
 
 
 def memoize(
-    encode: Callable[[R], bytes] = pickle.dumps,
-    decode: Callable[[bytes], R] = pickle.loads,
+    clean: bool = False, arg_mark: tuple = (object(),), kwarg_mark: tuple = (object(),), database: str = ".cached"
 ) -> Callable[[Callable[P, R]], Callable[P, R]]:
     def decorator(func: Callable[P, R]) -> Callable[P, R]:
-        cache = {}
-
         @wraps(func)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
-            try:
-                key = make_key(func, args, kwargs)
-                if key not in cache:
-                    result = func(*args, **kwargs)
-                    try:
-                        cache[key] = encode(result)
-                    except Exception as error:
-                        raise CacheEncodeError() from error
-                try:
-                    return decode(cache[key])
-                except Exception as error:
-                    del cache[key]
-                    raise CacheDecodeError() from error
-            except CacheError as error:
-                logger.exception(error)
-                return func(*args, **kwargs)
+            key: tuple = (inspect.getsource(func),)
+            key += arg_mark
+            key += args
+            key += kwarg_mark
+            for item in kwargs.items():
+                key += item
+            hash_key = hashlib.sha256(pickle.dumps(key)).hexdigest()
+
+            with shelve.open(database) as data:
+                if hash_key not in data or clean is True:
+                    data[hash_key] = func(*args, **kwargs)
+            return data[hash_key]
 
         return wrapper
 
     return decorator
-
-
-def make_key(func, args, kwargs) -> str:
-    try:
-        return TypeHintKeyMaker(func, args, kwargs).hash()
-    except Exception as error:
-        raise CacheKeyError() from error

@@ -20,6 +20,8 @@ repos:
         - beautifulsoup4
         - tqdm
         - PyPDF2
+        - PyHackMD
+        - regex
 
 - repo: https://github.com/pre-commit/mirrors-mypy
   rev: v1.9.0
@@ -34,6 +36,9 @@ repos:
         - icecream
         - tqdm
         - types-tqdm
+        - types-regex
+        - PyHackMD
+        - regex
 
 - repo: https://github.com/codespell-project/codespell
   rev: v2.2.6
