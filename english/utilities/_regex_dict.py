@@ -56,7 +56,7 @@ class RegexDict(ABC):
         if response.status_code == 200:
             soup = BeautifulSoup(response.content, "html.parser")
             for a in soup.find_all("a"):
-                text = a.text
-                result = re.compile(r"^-?\w+-?$").match(text)
-                if result is not None:
+                text: str = a.text
+                href: str = a.get("href", None)
+                if href is not None and href.startswith("http://www.yourdictionary.com/"):
                     yield text
