@@ -13,7 +13,10 @@ R = TypeVar("R")
 
 
 def memoize(
-    clean: bool = False, arg_mark: tuple = (object(),), kwarg_mark: tuple = (object(),), database: str = ".cached"
+    clean: bool = False,
+    arg_mark: tuple = (object(),),
+    kwarg_mark: tuple = (object(),),
+    database: str = ".cached",
 ) -> Callable[[Callable[P, R]], Callable[P, R]]:
     def decorator(func: Callable[P, R]) -> Callable[P, R]:
         @wraps(func)
@@ -29,7 +32,7 @@ def memoize(
             with shelve.open(database) as data:
                 if hash_key not in data or clean is True:
                     data[hash_key] = func(*args, **kwargs)
-            return data[hash_key]
+                return data[hash_key]
 
         return wrapper
 

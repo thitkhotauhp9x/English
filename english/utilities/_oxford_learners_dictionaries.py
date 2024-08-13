@@ -1,12 +1,12 @@
 from dataclasses import dataclass
-from functools import lru_cache
 from typing import Optional
 
 from bs4 import BeautifulSoup
 from requests import get, Response
+from english.wrappers.cache import memoize
 
 
-@lru_cache(maxsize=None)
+@memoize()
 def get_definition(word: str, timeout: int | None) -> Response:
     url = f"https://www.oxfordlearnersdictionaries.com/definition/english/{word}"
     response = get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=timeout)
