@@ -1,7 +1,10 @@
+import itertools
 from dataclasses import dataclass
-from typing import List
+from typing import List, Generator, Tuple
 
 import regex as re
+
+from english.utilities._phonetic_tag import PhoneticTag
 
 
 @dataclass
@@ -32,3 +35,22 @@ class Phonetic:
         pattern = self.get_pattern("(?&phonetic)")
         formated_pattern = re.sub(r"\s", "", pattern)
         return list(re.compile(formated_pattern).findall(self.phonetic))
+
+    def groups(self) -> Generator[Tuple[PhoneticTag, str], None, None]:
+        def _group_by(_phonetic_letter: chr) -> PhoneticTag:
+            consonant_pattern = self.get_pattern("(?&consonant)")
+            if re.match(consonant_pattern, _phonetic_letter):
+                return PhoneticTag.CONSONANT
+
+            vowel_pattern = self.get_pattern("(?&vowel)")
+            if re.match(vowel_pattern, _phonetic_letter):
+                return PhoneticTag.VOWEL
+
+            stress_pattern = self.get_pattern("(?&stress)")
+            if re.match(stress_pattern, _phonetic_letter):
+                return PhoneticTag.STRESS
+
+            return PhoneticTag.UNKNOWN
+
+        for key, group in itertools.groupby(self.phonetic, key=_group_by):
+            yield key, "".join(group)
