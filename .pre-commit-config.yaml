@@ -1,11 +1,4 @@
 repos:
-- repo: https://github.com/psf/black
-  rev: 22.3.0
-  hooks:
-    - id: black
-      args: [--line-length=120]
-      language_version: python
-
 - repo: https://github.com/pylint-dev/pylint
   rev: v3.1.0
   hooks:
@@ -45,3 +38,10 @@ repos:
   hooks:
     - id: codespell
       language_version: python
+
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.5.7
+  hooks:
+    - id: ruff
+      args: [ --fix ]
+    - id: ruff-format
