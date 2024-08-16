@@ -28,11 +28,14 @@ class PhoneticAnalysis:
     def make_report(self) -> str:
         data: List[Word] = list(self.get_words())
 
+        data = [word for word in data if len(list(word.vowels())) == 1]
+
         def _find_vowel(t: Word) -> str:
             return find_vowel(t[1])
 
         content = f"{self.regex}\n"
         content += "===\n"
+
         for key, group in groupby(sorted(data, key=_find_vowel), key=_find_vowel):
             group_: list = list(group)
             percent = round(len(group_) * 100 / len(data))
