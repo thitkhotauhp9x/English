@@ -2,7 +2,9 @@
 
 import logging
 from functools import lru_cache
-from logging import INFO, Logger
+from logging import Logger
+
+from icecream import ic
 
 __all__ = ["getLogger"]
 
@@ -12,10 +14,15 @@ def init_logging() -> None:
     logging.basicConfig(
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         datefmt="%m/%d/%Y %I:%M:%S %p",
-        level=INFO,
+        level=logging.DEBUG,
     )
-
 
 def getLogger(name: str) -> Logger:
     init_logging()
-    return logging.getLogger(name)
+    logger = logging.getLogger(name)
+
+    def debug(msg: str) -> None:
+        logger.debug(msg)
+
+    ic.configureOutput(includeContext=True, contextAbsPath=True, outputFunction=debug)
+    return logger

@@ -1,15 +1,25 @@
-from fastapi import FastAPI
-from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
-from fastapi.requests import Request
+import logging
+import threading
+import time
 
-templates = Jinja2Templates(directory="templates")
+from fastapi import FastAPI
+
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S',
+    level=logging.DEBUG
+)
+
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
-
-@app.get("/", response_class=HTMLResponse)
-async def read_item(request: Request):
-    return templates.TemplateResponse(
-        request=request, name="index.html"
-    )
+@app.get("/search")
+def root():
+    logger.debug("%r", "Creating ...")
+    thread_count = threading.active_count()
+    logger.debug("threads=%r", thread_count)
+    time.sleep(2)
+    logger.debug("%r", "Done")
+    return {}
