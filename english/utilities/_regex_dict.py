@@ -1,4 +1,3 @@
-import re
 from abc import ABC
 from dataclasses import dataclass, field
 from functools import lru_cache

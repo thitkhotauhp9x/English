@@ -13,10 +13,12 @@ logger = logging.getLogger(__name__)
 
 def main():
     phonetic_analysis = PhoneticAnalysis(
-        regex="^[^ueoaiy-]*o[^ueoaiyr]{2}e[^-wueoraiy]*$"
+        regex="^[^ueoai]*[a]+[^ueorai]*$"
     )
-    content = phonetic_analysis.make_report()
-    print(content)
+    words = phonetic_analysis.get_words()
+    words = [word for word in words if len(list(word.vowels())) == 1]
+    for word in words:
+        print(word.word)
 
 
 if __name__ == "__main__":
