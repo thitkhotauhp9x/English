@@ -17,6 +17,7 @@ def main():
     )
     words = phonetic_analysis.get_words()
     words = [word for word in words if len(list(word.vowels())) == 1]
+
     for word in words:
         print(word.word)
 
