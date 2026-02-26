@@ -1,6 +1,6 @@
 import logging
 
-from utilities import PhoneticAnalysis
+from english.utilities.phonetic_analysis import PhoneticAnalysis
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",

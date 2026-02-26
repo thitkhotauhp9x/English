@@ -1,8 +1,7 @@
 from typing import Generator, NamedTuple
 
-from utilities._phonetic import Phonetic
-from utilities._phonetic_tag import PhoneticTag
-
+from english.utilities.phonetic import Phonetic
+from english.utilities.phonetic_tag import PhoneticTag
 
 class Word(NamedTuple):
     word: str

@@ -4,7 +4,7 @@ from typing import Generator, List, Tuple
 
 import regex as re
 
-from utilities._phonetic_tag import PhoneticTag
+from english.utilities.phonetic_tag import PhoneticTag
 
 
 @dataclass

@@ -5,10 +5,10 @@ from typing import Generator, List
 
 from tqdm import tqdm
 
-from utilities._common import find_vowel
-from utilities._oxford_learners_dictionaries import OxfordLearnerDictionaries
-from utilities._regex_dict import RegexDict
-from utilities._word import Word
+from english.utilities.common import find_vowel
+from english.utilities.oxford_learners_dictionaries import OxfordLearnerDictionaries
+from english.utilities.regex_dict import RegexDict
+from english.utilities.word import Word
 
 logger = logging.getLogger(__name__)
 
