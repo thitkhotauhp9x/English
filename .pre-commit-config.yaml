@@ -7,6 +7,13 @@ repos:
       args: [ "run", "ruff", "format" ]
       language: python
       types_or: [ python, pyi ]
+      additional_dependencies: [ ]
+    - id: mypy
+      name: mypy
+      entry: poetry
+      args: ["run", "mypy"]
+      language: python
+      types_or: [ python, pyi ]
 
 #
 #- repo: local
