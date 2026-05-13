@@ -12,9 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    phonetic_analysis = PhoneticAnalysis(
-        regex="^[^ueoai]*[a]+[^ueorai]*$"
-    )
+    phonetic_analysis = PhoneticAnalysis(regex="^[^ueoai]*[a]+[^ueorai]*$")
     words = phonetic_analysis.get_words()
     words = [word for word in words if len(list(word.vowels())) == 1]
 

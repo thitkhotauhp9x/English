@@ -1,47 +1,57 @@
 repos:
-- repo: https://github.com/pylint-dev/pylint
-  rev: v3.1.0
-  hooks:
-    - id: pylint
-      args: [
-        "--disable", "missing-module-docstring,missing-function-docstring,missing-class-docstring",
-        "--max-line-length", "120",
-      ]
-      language_version: python
-      additional_dependencies:
-        - requests
-        - beautifulsoup4
-        - tqdm
-        - PyPDF2
-        - PyHackMD
-        - regex
-
-- repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.9.0
-  hooks:
-    - id: mypy
-      args: ["--install-types"]
-      language_version: python
-      additional_dependencies:
-        - types-requests
-        - types-beautifulsoup4
-        - PyPDF2
-        - icecream
-        - tqdm
-        - types-tqdm
-        - types-regex
-        - PyHackMD
-        - regex
-
-- repo: https://github.com/codespell-project/codespell
-  rev: v2.2.6
-  hooks:
-    - id: codespell
-      language_version: python
-
 - repo: https://github.com/astral-sh/ruff-pre-commit
   rev: v0.5.7
   hooks:
     - id: ruff
-      args: [ --fix ]
-    - id: ruff-format
+      name: ruff
+      entry: poetry
+      args: [ "run", "ruff", "format" ]
+      language: python
+#
+#- repo: local
+#  hooks:
+#    - id: mypy
+#      name: mypy
+#      entry: mypy
+#      language: python
+#      additional_dependencies: [ ]
+#
+#- repo: https://github.com/pylint-dev/pylint
+#  rev: v3.1.0
+#  hooks:
+#    - id: pylint
+#      args: [
+#        "--disable", "missing-module-docstring,missing-function-docstring,missing-class-docstring",
+#        "--max-line-length", "120",
+#      ]
+#      language_version: python
+#      additional_dependencies:
+#        - requests
+#        - beautifulsoup4
+#        - tqdm
+#        - PyPDF2
+#        - PyHackMD
+#        - regex
+#
+#- repo: https://github.com/pre-commit/mirrors-mypy
+#  rev: v1.9.0
+#  hooks:
+#    - id: mypy
+#      args: ["--install-types"]
+#      language_version: python
+#      additional_dependencies:
+#        - types-requests
+#        - types-beautifulsoup4
+#        - PyPDF2
+#        - icecream
+#        - tqdm
+#        - types-tqdm
+#        - types-regex
+#        - PyHackMD
+#        - regex
+#
+#- repo: https://github.com/codespell-project/codespell
+#  rev: v2.2.6
+#  hooks:
+#    - id: codespell
+#      language_version: python

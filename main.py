@@ -5,15 +5,16 @@ import time
 from fastapi import FastAPI
 
 logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
-    level=logging.DEBUG
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    level=logging.DEBUG,
 )
 
 
 logger = logging.getLogger(__name__)
 
 app = FastAPI()
+
 
 @app.get("/search")
 def root():

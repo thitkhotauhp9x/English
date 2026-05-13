@@ -1,10 +1,10 @@
 from abc import ABC
 from dataclasses import dataclass, field
 from functools import lru_cache
-from typing import Mapping, Any, Generator, Literal
+from typing import Any, Generator, Literal, Mapping
 
 from bs4 import BeautifulSoup
-from requests import post, Response
+from requests import Response, post
 
 
 @lru_cache(maxsize=None)
@@ -15,7 +15,9 @@ def get_words(url: str, regex: str) -> Response:
         "ccg": "all",
         "search": "Search",
     }
-    response = post(url=url, data=data, timeout=None, headers={"User-Agent": "Mozilla/5.0"})
+    response = post(
+        url=url, data=data, timeout=None, headers={"User-Agent": "Mozilla/5.0"}
+    )
     return response
 
 
@@ -23,7 +25,9 @@ def get_words(url: str, regex: str) -> Response:
 class RegexDict(ABC):
     regex: str
     url: str = field(default="https://www.visca.com/regexdict/")
-    headers: Mapping[Any, Any] = field(default_factory=lambda: {"User-Agent": "Mozilla/5.0"})
+    headers: Mapping[Any, Any] = field(
+        default_factory=lambda: {"User-Agent": "Mozilla/5.0"}
+    )
     timeout: int | None = field(default=None)
     ifun: str = field(default="if")
     ccg: str = field(default="all")
@@ -48,7 +52,12 @@ class RegexDict(ABC):
         return result
 
     def request(self) -> Response:
-        return post(url=self.url, data=self.data, timeout=None, headers={"User-Agent": "Mozilla/5.0"})
+        return post(
+            url=self.url,
+            data=self.data,
+            timeout=None,
+            headers={"User-Agent": "Mozilla/5.0"},
+        )
 
     def find(self) -> Generator[str, None, None]:
         response = self.request()
@@ -57,5 +66,7 @@ class RegexDict(ABC):
             for a in soup.find_all("a"):
                 text: str = a.text
                 href: str = a.get("href", None)
-                if href is not None and href.startswith("http://www.yourdictionary.com/"):
+                if href is not None and href.startswith(
+                    "http://www.yourdictionary.com/"
+                ):
                     yield text

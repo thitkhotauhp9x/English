@@ -1,8 +1,9 @@
 import pickle
 import shelve
 
-from requests import get
 from bs4 import BeautifulSoup
+from requests import get
+
 
 class Longman:
     @staticmethod
@@ -48,6 +49,7 @@ def main():
     # u -> ju:
     # l -> l
     # e -> None
+
 
 if __name__ == "__main__":
     main()
